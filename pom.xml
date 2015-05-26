@@ -288,11 +288,6 @@
 		<version>4.0.2</version>
 	</dependency>
 	<dependency>
-		<groupId>edu.cmu.ml.rtw</groupId>
-		<artifactId>micro-ppa</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</dependency>
-	<dependency>
 	  <groupId>semafor-semantic-parser</groupId>
 	  <artifactId>semafor-semantic-parser</artifactId>
 	  <version>1.0</version>
