@@ -2,6 +2,9 @@ package edu.cmu.ml.rtw.micro.sem.model.annotation.nlp;
 
 import java.util.List;
 import java.util.Set;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
@@ -36,8 +39,8 @@ public class SemparseAnnotatorSentence implements AnnotatorTokenSpan<String> {
 	public static final AnnotationTypeNLP<String> LOGICAL_FORM = 
 			new AnnotationTypeNLP<String>("nell-sem", String.class, Target.TOKEN_SPAN);
 
-	public static final String PARSER_MODEL_PATH="src/main/resources/models/parser.ser";
-	public static final String SUPERTAGGER_MODEL_PATH="src/main/resources/models/supertagger.ser";
+	public static final String PARSER_MODEL_PATH="models/parser.ser";
+	public static final String SUPERTAGGER_MODEL_PATH="models/supertagger.ser";
   
 	private final SupertaggingMentionCcgParser parser;
 
@@ -51,16 +54,38 @@ public class SemparseAnnotatorSentence implements AnnotatorTokenSpan<String> {
 
 		long maxParseTimeMillis = -1;                                                
 		int maxChartSize = Integer.MAX_VALUE;                                            
-
+    
+    /*
 		Supertagger supertagger = IoUtils.readSerializedObject(supertaggerFilename, Supertagger.class);                                      
 		MentionCcgParser semanticParser = IoUtils.readSerializedObject(parserFilename,                                                       
 		    MentionCcgParser.class);                                                                                                         
+    */
+
+		Supertagger supertagger = readResource(supertaggerFilename, Supertagger.class);                                      
+		MentionCcgParser semanticParser = readResource(parserFilename, MentionCcgParser.class);
 
 		SupertaggingMentionCcgParser parser = new SupertaggingMentionCcgParser(semanticParser, -1,
 		    maxParseTimeMillis, maxChartSize, false, null, supertagger, multitagThresholds);
 		
 		return new SemparseAnnotatorSentence(parser);
 	}
+
+  private static <T> T readResource(String resourceName, Class<T> clazz) {
+    T object = null;
+    InputStream fis = null;
+    ObjectInputStream in = null;
+    try {
+      fis = SemparseAnnotatorData.class.getClassLoader().getResourceAsStream(resourceName);
+      in = new ObjectInputStream(fis);
+      object = clazz.cast(in.readObject());
+      in.close();
+    } catch(IOException ex) {
+      throw new RuntimeException(ex);
+    } catch(ClassNotFoundException ex) {
+      throw new RuntimeException(ex);
+    }
+    return object;
+  }
   
 	@Override
 	public String getName() { return "cmunell_sem-0.0.1"; }
