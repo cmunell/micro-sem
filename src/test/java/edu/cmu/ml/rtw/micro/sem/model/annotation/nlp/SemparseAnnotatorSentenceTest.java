@@ -7,7 +7,9 @@ import org.junit.Test;
 import edu.cmu.ml.rtw.generic.data.DataTools;
 import edu.cmu.ml.rtw.generic.data.annotation.nlp.DocumentNLP;
 import edu.cmu.ml.rtw.generic.data.annotation.nlp.DocumentNLPInMemory;
+import edu.cmu.ml.rtw.generic.data.annotation.nlp.DocumentNLPMutable;
 import edu.cmu.ml.rtw.generic.data.annotation.nlp.Language;
+import edu.cmu.ml.rtw.generic.data.annotation.nlp.SerializerDocumentNLPMicro;
 import edu.cmu.ml.rtw.generic.data.annotation.nlp.micro.Annotation;
 import edu.cmu.ml.rtw.generic.model.annotator.nlp.PipelineNLP;
 import edu.cmu.ml.rtw.generic.model.annotator.nlp.PipelineNLPExtendable;
@@ -27,12 +29,13 @@ public class SemparseAnnotatorSentenceTest {
 		PipelineNLP pipeline = pipelineStanford.weld(pipelineExtendable);
 		DataTools dataTools = new DataTools();
 		dataTools.addAnnotationTypeNLP(SemparseAnnotatorSentence.LOGICAL_FORM);
-		DocumentNLP document = new DocumentNLPInMemory(dataTools, 
+		DocumentNLPMutable document = new DocumentNLPInMemory(dataTools, 
 		                                               "Test document", 
 		                                               "Barack Obama is the president of the United States. Madonna who was born in Bay City, Michigan. " +
-		                                               "Larry Page founded Google. Google was founded by Larry Page and Sergey Brin.",
-		                                               Language.English, pipeline);
-		List<Annotation> annotations = document.toMicroAnnotation().getAllAnnotations();
+                                                               "Larry Page founded Google. Google was founded by Larry Page and Sergey Brin.");
+                pipeline.run(document);
+                SerializerDocumentNLPMicro microSerial = new SerializerDocumentNLPMicro(dataTools);
+		List<Annotation> annotations = microSerial.serialize(document).getAllAnnotations();
 		for (Annotation annotation : annotations) {
 			System.out.println(annotation.toJsonString());
 		}
