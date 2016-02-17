@@ -135,7 +135,6 @@ public class SemparseAnnotatorSentence implements AnnotatorTokenSpan<String> {
 				Set<String> categories = Sets.newHashSet("concept:" + catAnnotation.getSecond());
 
 				typedMentions.add(new TypedMention(mentionString, categories, startIndex + 1, endIndex));
-                                System.out.println("bkdb: add1 '" + mentionString + "' with " + categories);
 			}
 			for (Pair<TokenSpan, TypedNP> catAnnotation : document.getTokenSpanAnnotations(ContextlessNPCategorizer.OUTOFCONTEXT_NP_CATEGORIES, i)) {
 				int startIndex = catAnnotation.getFirst().getStartTokenIndex();
@@ -152,7 +151,6 @@ public class SemparseAnnotatorSentence implements AnnotatorTokenSpan<String> {
 				Set<String> categories = Sets.newHashSet("concept:" + category);
 
 				typedMentions.add(new TypedMention(mentionString, categories, startIndex + 1, endIndex));
-                                System.out.println("bkdb: add2 '" + mentionString + "' with " + categories);
 			}
 
                         t.start();
