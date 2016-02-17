@@ -28,6 +28,8 @@ import edu.cmu.ml.rtw.generic.util.Pair;
 import edu.cmu.ml.rtw.util.Timer;
 import edu.cmu.ml.rtw.generic.util.Triple;
 import edu.cmu.ml.rtw.micro.cat.data.annotation.nlp.AnnotationTypeNLPCat;
+import edu.cmu.ml.rtw.contextless.ContextlessNPCategorizer;
+import edu.cmu.ml.rtw.contextless.TypedNP;
 import edu.cmu.ml.rtw.users.jayantk.ccg.CcgParseUtils;
 import edu.cmu.ml.rtw.users.jayantk.ccg.CcgParseUtils.MentionRelationInstance;
 import edu.cmu.ml.rtw.users.jayantk.ccg.MentionCcgParser;
@@ -113,7 +115,7 @@ public class SemparseAnnotatorSentence implements AnnotatorTokenSpan<String> {
 		List<Triple<TokenSpan, String, Double>> annotations = Lists.newArrayList();
 		for (int i = 0; i < document.getSentenceCount(); i++) {
 			List<String> tokens = document.getSentenceTokenStrs(i);
-                        if (tokens.size() > 27) continue;  // bkdb: cuts off the great bulk of time-consumption at a cost of maybe 1% to recall
+                        if (tokens.size() > 27) continue;  // bkisiel Summer 2015: cuts off the great bulk of time-consumption at a cost of maybe 1% to recall on recent KBP datasets
 			List<PoSTag> posTags = document.getSentencePoSTags(i);
 			List<String> pos = Lists.newArrayList();
 			for (PoSTag posTag : posTags) {
@@ -133,6 +135,24 @@ public class SemparseAnnotatorSentence implements AnnotatorTokenSpan<String> {
 				Set<String> categories = Sets.newHashSet("concept:" + catAnnotation.getSecond());
 
 				typedMentions.add(new TypedMention(mentionString, categories, startIndex + 1, endIndex));
+                                System.out.println("bkdb: add1 '" + mentionString + "' with " + categories);
+			}
+			for (Pair<TokenSpan, TypedNP> catAnnotation : document.getTokenSpanAnnotations(ContextlessNPCategorizer.OUTOFCONTEXT_NP_CATEGORIES, i)) {
+				int startIndex = catAnnotation.getFirst().getStartTokenIndex();
+				int endIndex = catAnnotation.getFirst().getEndTokenIndex();
+				List<String> mentionTokens = Lists.newArrayList();
+				for (int j = startIndex; j < endIndex; j++) {
+					mentionTokens.add(document.getTokenStr(i, j));
+				}
+				
+				String mentionString = Joiner.on(" ").join(mentionTokens);
+                                String category = catAnnotation.getSecond().getType();
+                                int pos2 = category.indexOf("|");  // Actual category name is after the "|";
+                                category = category.substring(pos2+1);
+				Set<String> categories = Sets.newHashSet("concept:" + category);
+
+				typedMentions.add(new TypedMention(mentionString, categories, startIndex + 1, endIndex));
+                                System.out.println("bkdb: add2 '" + mentionString + "' with " + categories);
 			}
 
                         t.start();

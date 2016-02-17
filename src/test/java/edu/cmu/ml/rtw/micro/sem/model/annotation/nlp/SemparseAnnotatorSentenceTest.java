@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import edu.cmu.ml.rtw.contextless.ContextlessNPCategorizer;
 import edu.cmu.ml.rtw.generic.data.DataTools;
 import edu.cmu.ml.rtw.generic.data.annotation.nlp.DocumentNLP;
 import edu.cmu.ml.rtw.generic.data.annotation.nlp.DocumentNLPInMemory;
@@ -25,6 +26,7 @@ public class SemparseAnnotatorSentenceTest {
 		SemparseAnnotatorSentence semanticParser = SemparseAnnotatorSentence.fromSerializedModels(SemparseAnnotatorSentence.PARSER_MODEL_PATH, SemparseAnnotatorSentence.SUPERTAGGER_MODEL_PATH);
 		
 		pipelineExtendable.extend(new NELLMentionCategorizer());
+                pipelineExtendable.extend(new ContextlessNPCategorizer());
 		pipelineExtendable.extend(semanticParser);
 		PipelineNLP pipeline = pipelineStanford.weld(pipelineExtendable);
 		DataTools dataTools = new DataTools();
