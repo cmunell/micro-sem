@@ -21,4 +21,4 @@ sed -i 's/-SNAPSHOT<\/version>/<\/version>/' pom.xml
 mvn clean deploy -U
 
 # Regardless of what happened, restore original pom.xml
-mv pom.xml.backup pm.xml
+mv pom.xml.backup pom.xml
