@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.cmu.ml.rtw</groupId>
 	<artifactId>micro-sem</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -30,22 +30,22 @@
   	<dependency>
  		<groupId>edu.cmu.ml.rtw</groupId>
  		<artifactId>micro-util</artifactId>
- 		<version>0.0.2-SNAPSHOT</version>
+ 		<version>0.0.4</version>
     </dependency>
     <dependency>
  		<groupId>edu.cmu.ml.rtw</groupId>
  		<artifactId>micro-cat</artifactId>
- 		<version>0.0.1-SNAPSHOT</version>
+ 		<version>0.0.4</version>
     </dependency>
     <dependency>
  		<groupId>edu.cmu.ml.rtw</groupId>
  		<artifactId>micro-ooccat</artifactId>
- 		<version>0.0.1-SNAPSHOT</version>
+ 		<version>0.0.1</version>
     </dependency>
     <dependency>
  		<groupId>edu.cmu.ml.rtw</groupId>
  		<artifactId>micro-sem-data</artifactId>
- 		<version>0.0.1-SNAPSHOT</version>
+ 		<version>0.0.1</version>
     </dependency>
 	<dependency>
 		<groupId>junit</groupId>
@@ -55,7 +55,7 @@
 	<dependency>
 		<groupId>edu.cmu.ml.rtw</groupId>
 		<artifactId>OntologyLearner-nosrc</artifactId>
-		<version>0.20150515.0-SNAPSHOT</version>
+		<version>0.20150515.0</version>
 	</dependency>
 	<dependency>
 		<groupId>org.apache.accumulo</groupId>
@@ -343,10 +343,15 @@
     </repository>
   </repositories>
   <distributionManagement>
-  	<repository>
+    <snapshotRepository>
       <id>rtw-libs-snapshot</id>
       <name>rtw-libs-snapshot</name>
       <url>dav:http://rtw.ml.cmu.edu:8081/artifactory/libs-snapshot-local</url>
+    </snapshotRepository>
+    <repository>
+      <id>rtw-libs</id>
+      <name>rtw-libs-releases</name>
+      <url>dav:http://rtw.ml.cmu.edu:8081/artifactory/libs-release-local</url>
     </repository>
   </distributionManagement>
 </project>
